@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "webpack:build": "webpack",
     "webpack:watch": "webpack -w",
     "start": "npm run webpack:watch"
   },

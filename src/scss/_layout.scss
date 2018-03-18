@@ -1,4 +1,7 @@
 .container {
+  position: relative;
+  height: auto;
+  overflow: hidden;
   width: 90rem;
   margin: 10rem auto 0;
 
@@ -28,6 +31,8 @@
   display: flex;
   align-items: center;
   align-content: space-between;
+
+  padding-bottom: 2rem;
 
   background-color: var(--color-grey-light-2);
 
@@ -89,10 +94,22 @@ section {
   font-size: 1.6rem;
 
   background-color: var(--color-grey-light-2);
+  width: 100%;
 }
 
 .section-about {
-  padding: 5rem;
+  padding: 10rem 5rem;
+  margin: -5rem 0;
+
+  background-color: var(--color-citrus);
+  color: var(--color-grey-light-1);
+
+  p {
+    color: var(--color-grey-dark-1);
+  }
+
+  -webkit-clip-path: polygon(0 0, 100% 5rem, 100% 100%, calc(100% - 5rem) 100%);
+  clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 calc(100% - 5rem));
 
   @include respond(small) {
     padding: 5rem 2rem;
@@ -100,11 +117,11 @@ section {
 }
 
 .section-skills {
+  padding-top: 10rem;
   padding-bottom: 10rem;
 }
 
 .section-contact {
-  position: relative;
   padding-bottom: 10rem;
   padding-top: 10rem;
   margin-top: -5rem;
