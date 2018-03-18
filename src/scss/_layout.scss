@@ -109,7 +109,7 @@ section {
   clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 calc(100% - 5rem));
 
   @include respond(small) {
-    padding: 5rem 2rem;
+    padding: 10rem 2rem;
   }
 }
 
