@@ -33,7 +33,7 @@
   --color-oriole: #ff7913;
   --color-rasp: #d72d5c;
 
-  --shadow-small: 0 2rem 5rem rgba(0, 0, 0, 0.06);
+  --shadow-small: 0 1rem 2rem rgba(0, 0, 0, 0.06);
   --shadow-big: 0 2rem 6rem rgba(0, 0, 0, 0.3);
 }
 
@@ -60,6 +60,8 @@ body {
     no-repeat;
 
   min-height: 100vh;
+
+  color: var(--color-grey-dark-1);
 }
 
 .heading-primary {
@@ -71,19 +73,15 @@ body {
   font-weight: 300;
   padding-bottom: 3rem;
   text-align: center;
-  color: var(--color-grey-dark-1);
 }
 
 .heading-tertiary {
   font-size: 1.8rem;
   font-weight: 300;
   padding-bottom: 0.5rem;
-  color: var(--color-oriole);
 }
 
 .paragraph {
   font-size: 1.6rem;
   font-weight: 400;
-
-  color: var(--color-grey-dark-1);
 }

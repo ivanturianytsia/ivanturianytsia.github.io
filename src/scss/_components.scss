@@ -1,0 +1,120 @@
+////////////////////////////////////
+// BUTTON
+
+.btn {
+  &:link,
+  &:visited {
+    position: relative;
+    display: block;
+    padding: 2rem 4rem;
+
+    font-weight: 300;
+    color: #fff;
+    text-decoration: none;
+
+    background-image: linear-gradient(
+      to left,
+      var(--color-oriole),
+      var(--color-rasp)
+    );
+
+    border-radius: 10rem;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 1rem 2rem rgba(#000, 0.2);
+
+    &::after {
+      transform: scaleX(1.4) scaleY(1.6);
+      opacity: 0;
+    }
+  }
+
+  &:active,
+  &:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 0.5rem 1rem rgba(#000, 0.2);
+    outline: none;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+
+    background-image: linear-gradient(
+      to left,
+      var(--color-oriole),
+      var(--color-rasp)
+    );
+
+    border-radius: 10rem;
+    transition: all 0.4s;
+  }
+}
+
+////////////////////////////////////
+// CONTACT LIST
+
+.contact-list {
+  display: flex;
+  justify-content: center;
+}
+
+////////////////////////////////////
+// SKILLS
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+
+  &__box {
+    max-width: 20rem;
+    padding: 1rem 2rem;
+    margin: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    text-align: center;
+    word-wrap: break-word;
+
+    background-color: var(--color-grey-light-1);
+    box-shadow: var(--shadow-small);
+
+    @include respond(small) {
+      max-width: 50%;
+    }
+  }
+
+  &__heading {
+    color: var(--color-oriole);
+  }
+}
+
+////////////////////////////////////
+// ABOUT
+
+.about {
+  &__message {
+    column-count: 2;
+    column-gap: 4rem; //1em = 14px;
+    column-rule: 1px solid var(--color-grey-light-4);
+    hyphens: auto;
+
+    @include respond(small) {
+      column-count: 1;
+    }
+  }
+}
