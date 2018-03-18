@@ -105,7 +105,7 @@ section {
     color: var(--color-grey-dark-1);
   }
 
-  -webkit-clip-path: polygon(0 0, 100% 5rem, 100% 100%, calc(100% - 5rem) 100%);
+  -webkit-clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 calc(100% - 5rem));
   clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 calc(100% - 5rem));
 
   @include respond(small) {
