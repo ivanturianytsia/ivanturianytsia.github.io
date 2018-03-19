@@ -112,20 +112,3 @@ section {
     padding: 10rem 2rem;
   }
 }
-
-.section-skills {
-  padding-top: 10rem;
-  padding-bottom: 10rem;
-}
-
-.section-contact {
-  padding-bottom: 10rem;
-  padding-top: 10rem;
-  margin-top: -5rem;
-
-  background: var(--color-grey-dark-1);
-  color: var(--color-grey-light-2);
-
-  -webkit-clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 100%);
-  clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 100%);
-}

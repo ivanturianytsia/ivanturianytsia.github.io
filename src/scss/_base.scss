@@ -65,21 +65,22 @@ body {
   color: var(--color-grey-dark-1);
 }
 
-.heading-primary {
+.heading-1 {
   font-size: 3rem;
 }
 
-.heading-secondary {
+.heading-2 {
   font-size: 3rem;
   font-weight: 300;
   padding-bottom: 3rem;
   text-align: center;
 }
 
-.heading-tertiary {
-  font-size: 1.8rem;
-  font-weight: 300;
+.heading-3 {
+  font-size: 1.5rem;
+  font-weight: 400;
   padding-bottom: 0.5rem;
+  text-transform: uppercase;
 }
 
 .paragraph {
