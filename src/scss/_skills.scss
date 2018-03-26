@@ -21,13 +21,19 @@
     justify-content: start;
 
     text-align: center;
-    // word-wrap: break-word;
+
+    box-sizing: content-box;
 
     background-color: var(--color-grey-light-1);
     box-shadow: var(--shadow-small);
 
-    @include respond(small) {
-      // max-width: 40%;
+    transition: all 0.2s;
+
+    backface-visibility: hidden;
+
+    &:hover {
+      transform: scale(1.2);
+      background-color: #fff;
     }
   }
 

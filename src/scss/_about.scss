@@ -1,0 +1,38 @@
+.about {
+  padding: 10rem 5rem;
+  margin: -5rem 0;
+
+  background-image: linear-gradient(
+    to left,
+    var(--color-grey-light-3),
+    var(--color-grey-light-1)
+  );
+
+  -webkit-clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 calc(100% - 5rem));
+  clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 calc(100% - 5rem));
+
+  @include respond(small) {
+    padding: 10rem 2rem;
+  }
+
+  &__message {
+    column-count: 2;
+    column-gap: 4rem; //1em = 14px;
+    hyphens: auto;
+
+    @include respond(small) {
+      column-count: 1;
+    }
+
+    &--ukr {
+      color: var(--color-citrus);
+    }
+
+    &--full {
+      color: var(--color-rasp);
+    }
+    &--eat {
+      color: var(--color-secondary);
+    }
+  }
+}

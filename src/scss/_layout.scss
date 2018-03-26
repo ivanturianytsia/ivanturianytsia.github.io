@@ -60,6 +60,11 @@
         var(--color-rasp),
         var(--color-oriole)
       );
+      // background-image: linear-gradient(
+      //   to right,
+      //   var(--color-primary),
+      //   var(--color-primary-light)
+      // );
     }
   }
 
@@ -92,23 +97,4 @@ section {
 
   background-color: var(--color-grey-light-2);
   width: 100%;
-}
-
-.section-about {
-  padding: 10rem 5rem;
-  margin: -5rem 0;
-
-  background-color: var(--color-citrus);
-  color: var(--color-grey-light-1);
-
-  p {
-    color: var(--color-grey-dark-1);
-  }
-
-  -webkit-clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 calc(100% - 5rem));
-  clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 calc(100% - 5rem));
-
-  @include respond(small) {
-    padding: 10rem 2rem;
-  }
 }
