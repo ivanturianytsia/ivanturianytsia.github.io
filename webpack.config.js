@@ -9,6 +9,10 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js'
   },
+  devServer: {
+    hot: true,
+    compress: true,
+  },
   module: {
     rules: [{
       test: /\.scss$/,

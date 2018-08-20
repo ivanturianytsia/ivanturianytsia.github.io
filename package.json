@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "webpack:build": "webpack",
-    "webpack:watch": "webpack -w",
-    "start": "npm run webpack:watch"
+    "webpack:watch": "webpack -w"
   },
   "repository": {
     "type": "git",
@@ -23,7 +22,10 @@
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.20.3",
-    "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.12"
+    "webpack": "^4.1.1"
+  },
+  "dependencies": {
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
   }
 }
