@@ -60,11 +60,6 @@
         var(--color-rasp),
         var(--color-oriole)
       );
-      // background-image: linear-gradient(
-      //   to right,
-      //   var(--color-primary),
-      //   var(--color-primary-light)
-      // );
     }
   }
 
@@ -92,6 +87,7 @@
 }
 
 section {
+  position: relative;
   padding: 5rem 0;
   font-size: 1.6rem;
 
