@@ -40,15 +40,16 @@ const getInitialPosition = () => ({
 let items = icons.map(item => {
 	// <image x="10" y="20" width="80" height="80" xlink:href="image.svg" />
 	const { x, y, vx, vy, vr } = getInitialPosition()
+	const fill = vy / maxvy * 0.3
 	const el = document.createElementNS('http://www.w3.org/2000/svg', 'use')
 	el.setAttributeNS(null, 'x', x)
 	el.setAttributeNS(null, 'y', y)
 	el.setAttributeNS(null, 'width', size)
 	el.setAttributeNS(null, 'height', size)
-	el.setAttributeNS(null, 'fill', 'currentcolor')
+	el.setAttributeNS(null, 'fill', `rgba(0,0,0,${fill})`)
 	el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', item)
 	svg.appendChild(el)
-	return { el, x, y, vx, vy, vr, a: 0 }
+	return { el, x, y, vx, vy, vr, fill, a: 0 }
 })
 
 const update = function() {
@@ -61,6 +62,7 @@ const update = function() {
 
 		item.el.setAttributeNS(null, 'x', item.x)
 		item.el.setAttributeNS(null, 'y', item.y)
+		item.el.setAttributeNS(null, 'fill', `rgba(0,0,0,${item.fill})`)
 
 		if (item.y >= vb[3]) {
 			const { x, y, vx, vy, vr } = getInitialPosition()
@@ -68,6 +70,7 @@ const update = function() {
 			item.y = y
 			item.vx = vx
 			item.vy = vy
+			item.fill = vy / maxvy * 0.5
 		}
 	})
 	requestAnimationFrame(update)
