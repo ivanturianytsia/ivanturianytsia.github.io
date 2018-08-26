@@ -4,7 +4,7 @@
   position: relative;
   padding-top: 10rem;
   padding-bottom: 10rem;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .skills {
@@ -28,17 +28,12 @@
 
     box-sizing: content-box;
 
-    background-color: rgba(249, 249, 249, 0.7);
+    background-color: rgba(249, 249, 249, 0.9);
     box-shadow: var(--shadow-small);
 
     transition: all 0.2s;
 
     backface-visibility: hidden;
-
-    &:hover {
-      transform: scale(1.2);
-      background-color: #fff;
-    }
   }
 
   &__heading {
