@@ -1,5 +1,5 @@
 .about {
-  padding: 10rem 5rem;
+  padding: 10rem 0;
   margin: -5rem 0;
   z-index: 10;
 
@@ -9,6 +9,10 @@
     var(--color-grey-light-1)
   );
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   -webkit-clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 calc(100% - 5rem));
   clip-path: polygon(0 0, 100% 5rem, 100% 100%, 0 calc(100% - 5rem));
 
@@ -16,24 +20,16 @@
     padding: 10rem 2rem;
   }
 
-  &__message {
-    column-count: 2;
-    column-gap: 4rem; //1em = 14px;
-    hyphens: auto;
+  &__list {
+    list-style: none;
+  }
 
-    @include respond(small) {
-      column-count: 1;
-    }
+  &__item {
+    padding: .5rem;
+  }
 
-    &--ukr {
-      color: var(--color-citrus);
-    }
-
-    &--full {
-      color: var(--color-rasp);
-    }
-    &--eat {
-      color: var(--color-secondary);
-    }
+  &__bullet {
+    margin-right: 1rem;
+    color: var(--color-citrus);
   }
 }
