@@ -37,7 +37,7 @@ const getInitialPosition = () => {
 		y: -size,
 		vx: 0,
 		vy: r * maxvy,
-		fill: `rgba(0, 0, 0, ${r * 0.3})`
+		fill: `rgba(0, 0, 0, ${r * 0.2})`
 	}
 }
 
