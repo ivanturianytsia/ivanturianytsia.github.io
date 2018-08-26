@@ -88,3 +88,23 @@ body {
   font-size: 1.6rem;
   font-weight: 400;
 }
+
+
+
+.list {
+  list-style: none;
+  text-align: left;
+
+  &__item {
+    font-size: 1.1em;
+
+    &:not(:last-child) {
+      padding-bottom: 1rem;
+    }
+  }
+
+  &__bullet {
+    margin-right: 1rem;
+    color: var(--color-citrus);
+  }
+}

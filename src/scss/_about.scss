@@ -19,17 +19,4 @@
   @include respond(small) {
     padding: 10rem 2rem;
   }
-
-  &__list {
-    list-style: none;
-  }
-
-  &__item {
-    padding: .5rem;
-  }
-
-  &__bullet {
-    margin-right: 1rem;
-    color: var(--color-citrus);
-  }
 }

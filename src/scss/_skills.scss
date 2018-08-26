@@ -18,22 +18,16 @@
 
   &__box {
     z-index: 10;
-    padding: 2rem 1rem;
+    padding: 2rem 2rem;
 
     display: flex;
     flex-direction: column;
     justify-content: start;
 
-    text-align: center;
-
     box-sizing: content-box;
 
     background-color: rgba(249, 249, 249, 0.9);
     box-shadow: var(--shadow-small);
-
-    transition: all 0.2s;
-
-    backface-visibility: hidden;
   }
 
   &__heading {
