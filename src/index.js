@@ -88,6 +88,7 @@ const init = function () {
 }
 
 window.addEventListener('load', () => {
+	document.body.style.transition = '.5s'
 	document.body.style.opacity = '1' // Full-page transition
 	init()
 })
