@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "webpack:build": "webpack",
-    "webpack:watch": "webpack -w"
+    "webpack:watch": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,6 @@
   },
   "dependencies": {
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5"
+    "webpack-dev-server": "^3.1.10"
   }
 }
