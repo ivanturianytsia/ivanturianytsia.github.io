@@ -43,6 +43,7 @@
         background-size: cover;
         background-attachment: fixed;
         background-position: bottom;
+        box-sizing: border-box;
         
         font-family: "Lato", sans-serif;
 
@@ -58,70 +59,101 @@
         align-items: center;
       }
 
-      .details {
-        background: url(assets/images/berlin.jpg);
-        background-size: 500px;
-        background-attachment: local;
-        background-position: left 341px top 480px;
+      .box {
+        width: 250px;
+        border-radius: 10px;
+        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+      }
 
-        height: 300px;
-        width: 300px;
-        border-radius: 50%;
+      .container > *:not(:last-child) {
+        margin-bottom: 10px;
+      }
+
+      .details {
+        background-color: #0057b7;
+        position: relative;
+        overflow: hidden;
 
         display: flex;
         flex-direction: column;
-        justify-content: start;
-        align-items: start;
+        justify-content: center;
         box-sizing: border-box;
-        
-        padding-top: 100px;
+        padding: 30px 30px;
+      }
 
-        box-shadow: 0 20px 150px rgba(0, 0, 0, 0.8);
+      .details__text {
+        z-index: 1;
+
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+      }
+
+      .details__text > *:not(:last-child) {
+        margin-bottom: 10px;
       }
 
       .name {
         font-size: 18px;
-        margin-left: 120px;
-        margin-bottom: 5px;
         font-weight: 700;
       }
 
       .profession {
         font-size: 20px;
-        margin-left: 120px;
-        margin-bottom: 5px;
-        color: #ffef92;
+        color: #ffd700;
       }
 
       .location {
         font-size: 14px;
-        margin-left: 120px;
-        margin-bottom: 23px;
       }
 
       .social {
         color: white;
         font-size: 16px;
-        margin-left: 145px;
-        margin-bottom: 5px;
+        margin-right: 10px;
       }
 
       .email {
         color: white;
-        margin-left: 145px;
-        font-size: 16px;
+      }
+
+      .support-ukraine {
+        border-radius: 10px;
+
+        background-color: #ffd700;
+        display: flex;
+        align-items: center;
+        padding: 15px 30px;
+      }
+
+      .support-ukraine__text {
+        color: #0057b7;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .support-ukraine__link {
+        color: inherit;
       }
     </style>
   </head>
   <body>
     <div class="overlay"></div>
     <div class="container">
-      <div class="details">
-        <h1 class="name">Ivan Turianytsia</h1>
-        <h2 class="profession">Software Engineer</h2>
-        <h3 class="location">Based in Berlin</h3>
-        <a class="social" href="https://www.linkedin.com/in/ivan-turianytsia-6a707a100/">LinkedIn</a>
-        <a class="email" href="mailto:vanyaturianitsa@gmail.com">Email</a>
+      <div class="box support-ukraine">
+        <span class="support-ukraine__text">Support Ukraine <a class="support-ukraine__link" target="_blank" href="https://prytulafoundation.org/en/home/support_page">here</a>!</span>
+      </div>
+      <div class="box details">
+        <div class="details__text">
+          <h1 class="name">Ivan Turianytsia</h1>
+          <h2 class="profession">Software Engineer</h2>
+          <h3 class="location">Based in Berlin, Germany</h3>
+          <div class="contacts">
+            <a class="social" href="https://www.linkedin.com/in/ivan-turianytsia-6a707a100/">LinkedIn</a>
+            <a class="email" href="mailto:vanyaturianitsa@gmail.com">Email</a>
+          </div>
+        </div>
       </div>
     </div>
   </body>
