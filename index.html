@@ -22,7 +22,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -39,15 +39,35 @@
       }
 
       body {
+        box-sizing: border-box;
+
+        font-family: "Outfit", sans-serif;
+
+        background-color: #000;
+
+        opacity: 0;
+        animation: fadeIn 2s ease-in-out;
+        animation-fill-mode: forwards;
+      }
+
+      .background {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+
         background: url(assets/images/rome.jpg);
         background-size: cover;
         background-attachment: fixed;
         background-position: bottom;
-        box-sizing: border-box;
+      }
 
-        font-family: "Lato", sans-serif;
-
-        color: white;
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
       }
 
       .container {
@@ -59,18 +79,16 @@
         align-items: center;
       }
 
-      .box {
-        width: 250px;
-        border-radius: 10px;
-        box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-      }
-
       .container > *:not(:last-child) {
         margin-bottom: 10px;
       }
 
       .details {
-        background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
+        width: 400px;
+        max-width: 100%;
+        box-shadow: #0009 0px 20px 30px -10px;
+        background-color: #fff;
+
         position: relative;
         overflow: hidden;
 
@@ -78,7 +96,11 @@
         flex-direction: column;
         justify-content: center;
         box-sizing: border-box;
-        padding: 30px 30px;
+        padding: 36px 48px;
+
+        opacity: 0;
+        animation: fadeIn 1s ease-in-out 1s;
+        animation-fill-mode: forwards;
       }
 
       .details__text {
@@ -89,48 +111,87 @@
         align-items: start;
         justify-content: center;
         font-size: 18px;
-        color: white;
+        color: #000;
+        opacity: 0;
       }
 
-      .details__text > *:not(:last-child) {
-        margin-bottom: 10px;
+      .details__text--loaded {
+        animation: fadeIn 1s ease-in-out 2s;
+        animation-fill-mode: forwards;
       }
 
       .name {
         font-size: 24px;
         font-weight: 700;
-        color: #ffffff;
+        color: #000;
+
+        margin-bottom: 4px;
+      }
+
+      .profession {
+        color: #0009;
+
+        margin-bottom: 16px;
       }
       
       .location {
         font-size: 14px;
+
+        margin-bottom: 2px;
       }
 
       .contacts > * {
-        color: white;
-        font-size: 16px;
+        color: #000;
+        font-size: 14px;
       }
 
       .contacts > *:not(:last-child) {
-        margin-right: 10px;
+        margin-right: 8px;
+      }
+
+      .email {
+        cursor: pointer;
+        text-decoration: underline dotted;
+      }
+
+      @media screen and (max-width: 440px) {
+        .container {
+          padding: 0 12px;
+        }
+      }
+
+      @media screen and (max-width: 380px) {
+        .details {
+          padding: 24px 36px;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="overlay"></div>
+    <div class="background background--loaded"></div>
     <div class="container">
-      <div class="box details">
-        <div class="details__text">
+      <div class="details">
+        <div class="details__text details__text--loaded">
           <h1 class="name">Ivan Turianytsia</h1>
           <span class="profession">Software Engineer</span>
-          <span class="location">Based in Berlin, Germany</span>
+          <span class="location">Berlin, Germany</span>
           <div class="contacts">
-            <a class="social" href="https://www.linkedin.com/in/ivan-turianytsia-6a707a100/" target="_blank">linkedin</a>
-            <a class="email" href="mailto:vanyaturianitsa@gmail.com">email</a>
-            <a class="ipi" href="https://ipi.turianytsia.com" target="_blank">ipi</a>
+            <a class="social" href="https://www.linkedin.com/in/ivan-turianytsia-6a707a100/" target="_blank">LinkedIn</a>
+            <span class="email" id="email">ivanturianytsia.work@gmail.com</span>
           </div>
         </div>
       </div>
     </div>
   </body>
+
+  <script>
+    document.getElementById("email").addEventListener("click", function() {
+      const range = document.createRange();
+      const selection = window.getSelection();
+
+      range.selectNodeContents(this);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+  </script>
 </html>
