@@ -94,9 +94,10 @@ function createPicture(config: PictureConfig): Picture {
     transparent: true,
   })
 
-  // Opaque paper behind the image, so a cut-out picture reads as printed on
-  // white stock rather than as a hole in the frame.
-  const backingMaterial = new THREE.MeshStandardMaterial({
+  // The passe-partout: off-white mount board the print sits inside. Also backs
+  // the image, so a cut-out picture reads as printed on white stock rather than
+  // as a hole in the frame.
+  const mountMaterial = new THREE.MeshStandardMaterial({
     color: new THREE.Color(FRAME.mountColor),
     roughness: 0.85,
     metalness: 0,
@@ -116,9 +117,9 @@ function createPicture(config: PictureConfig): Picture {
   frame.receiveShadow = true
   group.add(frame)
 
-  const backing = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), backingMaterial)
-  backing.name = 'backing'
-  group.add(backing)
+  const mount = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mountMaterial)
+  mount.name = 'mount'
+  group.add(mount)
 
   const image = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), imageMaterial)
   image.name = 'image'
@@ -127,7 +128,7 @@ function createPicture(config: PictureConfig): Picture {
   const caption = createCaption(config.caption)
   group.add(caption)
 
-  const parts: PictureParts = { config, frame, backing, image, caption }
+  const parts: PictureParts = { config, frame, mount, image, caption }
   fitToAspect(1, parts)
   placeOnWall(group, config)
 
@@ -149,42 +150,52 @@ function createPicture(config: PictureConfig): Picture {
 interface PictureParts {
   readonly config: PictureConfig
   readonly frame: THREE.Mesh
-  readonly backing: THREE.Mesh
+  readonly mount: THREE.Mesh
   readonly image: THREE.Mesh
   readonly caption: THREE.Mesh
 }
 
 /**
- * Resizes the frame, image and caption placement for a given image aspect
- * ratio, keeping the configured height fixed and letting width follow.
+ * Lays out frame, mount, image and name for a given image aspect ratio.
  *
- * Geometry is replaced rather than scaled: scaling the group would stretch the
- * frame border and the caption text along with the image.
+ * Geometry is rebuilt rather than scaled: scaling the group would stretch the
+ * frame rail, the mount border and the lettering along with the picture.
+ *
+ * Everything is positioned relative to the image, which stays centred on the
+ * group's origin. The mount is taller below than above, so its own centre sits
+ * slightly low — hence the offset applied to both the mount and the frame.
  */
 function fitToAspect(aspect: number, parts: PictureParts): void {
-  const { config, frame, backing, image, caption } = parts
+  const { config, frame, mount, image, caption } = parts
+  const { mount: side, mountBottom, border, depth } = FRAME
 
   const imageHeight = config.height
   const imageWidth = imageHeight * aspect
 
+  const mountWidth = imageWidth + side * 2
+  const mountHeight = imageHeight + side + mountBottom
+  // Top edge sits `side` above the image, bottom edge `mountBottom` below, so
+  // the centre of the board is offset downward by half the difference.
+  const mountOffsetY = (side - mountBottom) / 2
+
+  mount.geometry.dispose()
+  mount.geometry = new THREE.PlaneGeometry(mountWidth, mountHeight)
+  mount.position.set(0, mountOffsetY, depth / 2 + 0.0012)
+
   frame.geometry.dispose()
   frame.geometry = new THREE.BoxGeometry(
-    imageWidth + FRAME.border * 2,
-    imageHeight + FRAME.border * 2,
-    FRAME.depth,
+    mountWidth + border * 2,
+    mountHeight + border * 2,
+    depth,
   )
-
-  // Backing, then image just in front of it. Both sit proud of the frame's
-  // front face so the black border shows and nothing z-fights.
-  backing.geometry.dispose()
-  backing.geometry = new THREE.PlaneGeometry(imageWidth, imageHeight)
-  backing.position.z = FRAME.depth / 2 + 0.0012
+  frame.position.y = mountOffsetY
 
   image.geometry.dispose()
   image.geometry = new THREE.PlaneGeometry(imageWidth, imageHeight)
-  image.position.z = FRAME.depth / 2 + 0.0022
+  image.position.z = depth / 2 + 0.0022
 
-  caption.position.y = -(imageHeight / 2 + FRAME.border + FRAME.captionGap)
+  // Printed on the mount, centred in the band below the image.
+  caption.position.set(0, -(imageHeight / 2 + mountBottom / 2), depth / 2 + 0.0032)
 }
 
 /** Aspect ratio of the caption canvas. Wide enough for a long filename. */

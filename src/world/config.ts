@@ -108,7 +108,26 @@ export const PROPS_URL = fantasyPropsUrl
 
 const TABLE_TOP = 0.81
 
-export const PROPS = [
+export interface PropConfig {
+  readonly piece: string
+  readonly position: readonly [number, number, number]
+  readonly rotationY: number
+  /**
+   * How `position.y` is interpreted.
+   *
+   * `base` (the default) treats it as where the object's lowest point goes, and
+   * the prop is measured and dropped onto it — right for anything standing on
+   * the floor, and it corrects models whose origin is not at their feet.
+   *
+   * `origin` uses the y as given. Needed for anything that hangs: a banner's
+   * origin is its mount point with the cloth falling ~1.5m below it, so
+   * grounding it would stand it on the floor instead of hanging it on the wall.
+   */
+  readonly anchor?: 'base' | 'origin'
+}
+
+export const PROPS: readonly PropConfig[] = [
+
   // Bookshelves along the east wall, backs to it.
   { piece: 'Bookcase_2', position: [2.66, 0, -1.6], rotationY: -90 },
   { piece: 'Bookcase_2', position: [2.66, 0, 0.5], rotationY: -90 },
@@ -123,11 +142,7 @@ export const PROPS = [
   { piece: 'Chair_1', position: [-0.7, 0, 1.0], rotationY: 0 },
   { piece: 'CandleStick_Triple', position: [0.7, TABLE_TOP, 1.9], rotationY: -25 },
   { piece: 'Book_Stack_1', position: [-0.5, TABLE_TOP, 1.75], rotationY: 15 },
-] as const satisfies readonly {
-  piece: string
-  position: readonly [number, number, number]
-  rotationY: number
-}[]
+]
 
 /**
  * Room extents, derived from the grid so there is one source of truth. Anything
@@ -286,30 +301,45 @@ export const PICTURES = [
     caption: 'old-website.jpg',
     wall: 'back',
     cell: 1,
-    height: 0.74,
-    centerY: 1.5,
+    height: 1.48,
+    centerY: 1.72,
   },
   {
     url: blessUrl,
     caption: 'bless.png',
     wall: 'left',
     cell: 1,
-    height: 0.42,
-    centerY: 1.5,
+    height: 0.84,
+    centerY: 1.55,
   },
 ] as const satisfies readonly PictureConfig[]
 
 export const FRAME = {
-  /** Width of the visible black border around the image. */
-  border: 0.038,
+  /** Width of the frame rail itself, outside the mount. */
+  border: 0.05,
   /** How far the frame stands off the wall. */
-  depth: 0.032,
+  depth: 0.04,
   color: 0x121212,
-  /** Paper behind the image, visible through any transparent pixels. */
-  mountColor: 0xf6f4ef,
-  /** Height of the caption text under each frame. */
-  captionHeight: 0.03,
-  /** Gap between the bottom of the frame and the caption. */
-  captionGap: 0.055,
-  captionColor: '#4a4a4a',
+
+  /**
+   * White passe-partout — the mount board the print sits inside. Also shows
+   * through any transparent pixels in the image itself, which is why it is pure
+   * white rather than a warmer off-white: both images already contain white, and
+   * a tinted mount reads as a mismatch against them.
+   */
+  mountColor: 0xffffff,
+  /** Mount width at the top and sides. Kept slim on purpose. */
+  mount: 0.075,
+  /**
+   * Mount width along the bottom, wider than the sides.
+   *
+   * This is how picture framing is actually done — a "weighted" mount, because
+   * an even border reads as bottom-heavy to the eye. It also happens to be where
+   * the title goes, so the extra depth earns itself twice.
+   */
+  mountBottom: 0.17,
+
+  /** Cap height of the name printed on the mount. */
+  captionHeight: 0.052,
+  captionColor: '#141414',
 } as const

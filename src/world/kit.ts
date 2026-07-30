@@ -97,9 +97,13 @@ function furnish(group: THREE.Group, props: ReadonlyMap<string, THREE.Object3D>)
     // them: the chest is rigged and its armature sits at its centre, which
     // buried it half a metre into the floor. Measuring is cheaper than knowing
     // which ones are honest.
-    const measured = new THREE.Box3().setFromObject(prop)
-    if (measured.isEmpty() === false) {
-      prop.position.y += y - measured.min.y
+    //
+    // Hanging props opt out — see the note on `anchor` in config.
+    if (config.anchor !== 'origin') {
+      const measured = new THREE.Box3().setFromObject(prop)
+      if (measured.isEmpty() === false) {
+        prop.position.y += y - measured.min.y
+      }
     }
 
     group.add(prop)
