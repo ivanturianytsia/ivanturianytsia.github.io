@@ -1,197 +1,38 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-124108789-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-124108789-1');
-    </script>
-
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Ivan Turianytsia</title>
-    <meta name="description" content="Software Engineer based in Berlin, Germany">
-    <meta name="author" content="Ivan Turianytsia">
+    <meta name="description" content="A room you can stand inside." />
+    <meta name="color-scheme" content="dark" />
 
-    <meta name="og:title" content="Ivan Turianytsia">
-    <meta name="og:description" content="Software Engineer based in Berlin, Germany">
-    <meta name="og:image" content="assets/images/rome.jpg">
+    <!-- Carried over from the previous site, unchanged. These live in public/
+         so they are copied to the site root verbatim, which is where the
+         absolute paths below and in site.webmanifest expect to find them. -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0b0d10" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
-
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-
-    <style>
-      *,
-      *::after,
-      *::before {
-        margin: 0;
-        padding: 0;
-        box-sizing: inherit;
-      }
-
-      body {
-        box-sizing: border-box;
-
-        font-family: "Outfit", sans-serif;
-
-        background-color: #000;
-
-        opacity: 0;
-        animation: fadeIn 2s ease-in-out;
-        animation-fill-mode: forwards;
-      }
-
-      .background {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-
-        background: url(assets/images/rome.jpg);
-        background-size: cover;
-        background-attachment: fixed;
-        background-position: bottom;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      .container {
-        height: 100vh;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .container > *:not(:last-child) {
-        margin-bottom: 10px;
-      }
-
-      .details {
-        width: 400px;
-        max-width: 100%;
-        box-shadow: #0009 0px 20px 30px -10px;
-        background-color: #fff;
-
-        position: relative;
-        overflow: hidden;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        box-sizing: border-box;
-        padding: 36px 48px;
-
-        opacity: 0;
-        animation: fadeIn 1s ease-in-out 1s;
-        animation-fill-mode: forwards;
-      }
-
-      .details__text {
-        z-index: 1;
-
-        display: flex;
-        flex-direction: column;
-        align-items: start;
-        justify-content: center;
-        font-size: 18px;
-        color: #000;
-        opacity: 0;
-      }
-
-      .details__text--loaded {
-        animation: fadeIn 1s ease-in-out 2s;
-        animation-fill-mode: forwards;
-      }
-
-      .name {
-        font-size: 24px;
-        font-weight: 700;
-        color: #000;
-
-        margin-bottom: 4px;
-      }
-
-      .profession {
-        color: #0009;
-
-        margin-bottom: 16px;
-      }
-      
-      .location {
-        font-size: 14px;
-
-        margin-bottom: 2px;
-      }
-
-      .contacts > * {
-        color: #000;
-        font-size: 14px;
-      }
-
-      .contacts > *:not(:last-child) {
-        margin-right: 8px;
-      }
-
-      .email {
-        cursor: pointer;
-        text-decoration: underline dotted;
-      }
-
-      @media screen and (max-width: 440px) {
-        .container {
-          padding: 0 12px;
-        }
-      }
-
-      @media screen and (max-width: 380px) {
-        .details {
-          padding: 24px 36px;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <div class="background background--loaded"></div>
-    <div class="container">
-      <div class="details">
-        <div class="details__text details__text--loaded">
-          <h1 class="name">Ivan Turianytsia</h1>
-          <span class="profession">Software Engineer</span>
-          <span class="location">Berlin, Germany</span>
-          <div class="contacts">
-            <a class="social" href="https://www.linkedin.com/in/ivan-turianytsia-6a707a100/" target="_blank">LinkedIn</a>
-            <span class="email" id="email">ivan@turianytsia.com</span>
-          </div>
-        </div>
-      </div>
+    <canvas id="stage"></canvas>
+
+    <!-- Removed from the DOM by src/loading.ts once the fade completes. -->
+    <div id="loading" role="progressbar" aria-label="Loading room">
+      <div id="loading-track"><div id="loading-bar"></div></div>
     </div>
+
+    <p id="hint" aria-live="polite">Drag to look around</p>
+
+    <noscript>
+      <p class="fallback">This room is rendered with WebGL and needs JavaScript enabled.</p>
+    </noscript>
+
+    <script type="module" src="/src/main.ts"></script>
   </body>
-
-  <script>
-    document.getElementById("email").addEventListener("click", function() {
-      const range = document.createRange();
-      const selection = window.getSelection();
-
-      range.selectNodeContents(this);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    });
-  </script>
 </html>

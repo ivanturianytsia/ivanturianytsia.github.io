@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["es2024", "dom", "dom.iterable"],
+
+    // TypeScript 7 defaults `types` to [] (it no longer auto-includes every
+    // @types/* package). Without this, import.meta.hot and import.meta.env are
+    // untyped. @types/three still resolves — it is reached through the `three`
+    // import, not through ambient inclusion.
+    "types": ["vite/client"],
+
+    "moduleDetection": "force",
+    "noEmit": true,
+    "skipLibCheck": true,
+
+    // Vite/Oxc strips types per-file and never sees the type graph, so forbid
+    // any TS syntax that would need real emit (enums, namespaces, parameter
+    // properties) and require explicit `import type`.
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src", "vite.config.ts"]
+}

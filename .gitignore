@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+*.tsbuildinfo
+
+# Pre-optimisation model/texture originals. Kept locally, never shipped:
+# these are the multi-megabyte downloads that get compressed into src/assets/.
+raw-assets/

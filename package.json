@@ -1,0 +1,22 @@
+{
+  "name": "ivan-palace",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "A 3D room you stand inside. Personal website.",
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "dev": "vite",
+    "prepare": "git config core.hooksPath .githooks",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "@types/three": "0.185.1",
+    "typescript": "7.0.2",
+    "vite": "8.1.5"
+  }
+}

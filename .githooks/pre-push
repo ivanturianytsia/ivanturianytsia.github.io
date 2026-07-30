@@ -1,0 +1,74 @@
+#!/bin/sh
+#
+# Builds the site locally and publishes it to the gh-pages branch on push.
+#
+# Replaces the GitHub Actions workflow: the build runs on this machine, and only
+# the finished dist/ is sent to the branch GitHub Pages serves from.
+#
+# Why publish a separate branch rather than commit dist/ on main:
+# git decides which commits a push will send *before* this hook runs, so a
+# commit created in here would sit on your branch unpushed until the next push —
+# a genuinely confusing trap. Pushing gh-pages explicitly from inside the hook
+# sidesteps that entirely, and keeps build output out of main's history.
+#
+# Installed via `core.hooksPath`, set by the `prepare` script in package.json,
+# so it survives a fresh clone after `npm install`.
+
+set -e
+
+REMOTE_NAME="$1"
+REMOTE_URL="$2"
+PAGES_BRANCH="gh-pages"
+ROOT=$(git rev-parse --show-toplevel)
+
+# Only publish when the site's own branch is going up. Pushing a feature branch
+# or a tag should not redeploy. This repo's default branch is master, not main.
+publish=0
+while read -r _local_ref local_sha remote_ref _remote_sha; do
+  # All-zero sha means the ref is being deleted; nothing to build.
+  case "$local_sha" in
+    *[!0]*) ;;
+    *) continue ;;
+  esac
+  case "$remote_ref" in
+    refs/heads/master) publish=1 ;;
+  esac
+done
+
+if [ "$publish" -eq 0 ]; then
+  exit 0
+fi
+
+echo "pre-push: building site locally..."
+# npm run build is `tsc --noEmit && vite build`, so a type error stops the push
+# before anything is published — the same gate the CI job used to provide.
+npm run --prefix "$ROOT" build
+
+if [ ! -d "$ROOT/dist" ]; then
+  echo "pre-push: no dist/ after build, refusing to publish" >&2
+  exit 1
+fi
+
+SOURCE_SHA=$(git -C "$ROOT" rev-parse --short HEAD)
+NAME=$(git -C "$ROOT" config user.name || echo "local build")
+EMAIL=$(git -C "$ROOT" config user.email || echo "local@build")
+
+# A throwaway repository holding only the built files. gh-pages carries no
+# history worth keeping — it is a build artifact — so each publish force-pushes
+# a single fresh commit rather than accumulating one per deploy.
+STAGE=$(mktemp -d)
+cleanup() { rm -rf "$STAGE"; }
+trap cleanup EXIT
+
+cp -R "$ROOT/dist/." "$STAGE/"
+
+git -C "$STAGE" init -q
+git -C "$STAGE" checkout -qb "$PAGES_BRANCH"
+git -C "$STAGE" add -A
+git -C "$STAGE" -c user.name="$NAME" -c user.email="$EMAIL" \
+  commit -qm "build from $SOURCE_SHA"
+
+echo "pre-push: publishing to $REMOTE_NAME/$PAGES_BRANCH..."
+git -C "$STAGE" push -q --force "$REMOTE_URL" "$PAGES_BRANCH"
+
+echo "pre-push: published $SOURCE_SHA"
