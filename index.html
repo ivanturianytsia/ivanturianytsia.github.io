@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Ivan Turianytsia</title>
+    <meta name="description" content="A room you can stand inside." />
+    <meta name="color-scheme" content="dark" />
+
+    <!-- Carried over from the previous site, unchanged. These live in public/
+         so they are copied to the site root verbatim, which is where the
+         absolute paths below and in site.webmanifest expect to find them. -->
+    <link rel="icon" href="./favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./site.webmanifest" />
+    <meta name="theme-color" content="#0b0d10" />
+
+    <script type="module" crossorigin src="./assets/index-ZdRsc6VD.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-D7uSvFuY.css">
+  </head>
+  <body>
+    <canvas id="stage"></canvas>
+
+    <!-- Removed from the DOM by src/loading.ts once the fade completes. -->
+    <div id="loading" role="progressbar" aria-label="Loading room">
+      <div id="loading-track"><div id="loading-bar"></div></div>
+    </div>
+
+    <p id="hint" aria-live="polite">Drag to look around</p>
+
+    <!-- Shown by src/farewell.ts on exit intent. A native <dialog> so it gets
+         modal focus trapping and Esc-to-close without any of that being
+         hand-rolled. -->
+    <dialog id="farewell" aria-labelledby="farewell-title">
+      <h2 id="farewell-title">Let's connect</h2>
+      <p>Thank you for your visit.</p>
+      <a id="farewell-link" href="#" target="_blank" rel="noopener noreferrer">Go to Ivan's LinkedIn</a>
+      <button id="farewell-close" type="button">Maybe later</button>
+    </dialog>
+
+    <noscript>
+      <p class="fallback">This room is rendered with WebGL and needs JavaScript enabled.</p>
+    </noscript>
+
+  </body>
+</html>
