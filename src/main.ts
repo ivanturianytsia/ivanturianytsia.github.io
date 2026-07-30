@@ -47,7 +47,11 @@ stage.onFrame((dt) => {
 // Hold the black screen until every asset is in and the shaders are built, then
 // fade up. Called once: a hot reload re-runs buildWorld but not this module, so
 // the loading screen never reappears mid-session.
-void loading.reveal(() => stage.renderer.compileAsync(stage.scene, stage.camera))
+void loading
+  .reveal(() => stage.renderer.compileAsync(stage.scene, stage.camera))
+  // Armed only once the room is actually visible, so the touch idle timer
+  // measures time spent in it rather than time spent downloading it.
+  .then(() => farewell.arm())
 
 /**
  * Attaches a world to the stage.
