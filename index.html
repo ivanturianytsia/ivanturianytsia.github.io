@@ -29,6 +29,16 @@
 
     <p id="hint" aria-live="polite">Drag to look around</p>
 
+    <!-- Shown by src/farewell.ts on exit intent. A native <dialog> so it gets
+         modal focus trapping and Esc-to-close without any of that being
+         hand-rolled. -->
+    <dialog id="farewell" aria-labelledby="farewell-title">
+      <h2 id="farewell-title">Let's connect</h2>
+      <p>Thank you for your visit.</p>
+      <a id="farewell-link" href="#" target="_blank" rel="noopener noreferrer">Go to Ivan's LinkedIn</a>
+      <button id="farewell-close" type="button">Maybe later</button>
+    </dialog>
+
     <noscript>
       <p class="fallback">This room is rendered with WebGL and needs JavaScript enabled.</p>
     </noscript>

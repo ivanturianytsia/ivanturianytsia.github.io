@@ -15,6 +15,8 @@ npm run dev
 | `npm run typecheck` | `tsc --noEmit` on its own                     |
 
 Four dependencies total: `three`, plus `vite`, `typescript` and `@types/three`.
+Keeping it that way is a rule, not an accident — see
+[CLAUDE.md](CLAUDE.md) for that and the other working rules for this repo.
 
 ## The one thing to understand: stage vs world
 

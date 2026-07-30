@@ -2,6 +2,14 @@
   color-scheme: dark;
 }
 
+/* Without this, `width: 100%` on the dialog's buttons adds their padding and
+   border on top of the full width and they overflow the card. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body {
   margin: 0;
@@ -97,4 +105,73 @@ body {
   #loading-bar {
     transition: none;
   }
+}
+
+/* Exit-intent card. Sits above the canvas via the top layer that <dialog> gets
+   from showModal(), so it needs no z-index of its own. */
+#farewell {
+  margin: auto;
+  padding: 2rem 2.25rem 1.75rem;
+  width: min(24rem, calc(100vw - 2.5rem));
+  color: #f2efe9;
+  background: #16181c;
+  border: 1px solid #ffffff1f;
+  border-radius: 0.75rem;
+  box-shadow: 0 1.5rem 3rem #000000a6;
+  font:
+    400 0.9375rem/1.55 ui-sans-serif,
+    system-ui,
+    sans-serif;
+}
+
+#farewell::backdrop {
+  background: #05060899;
+  backdrop-filter: blur(3px);
+}
+
+#farewell h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+#farewell p {
+  margin: 0 0 1.25rem;
+  color: #f2efe9a8;
+}
+
+#farewell a,
+#farewell button {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font: inherit;
+  text-align: center;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+#farewell a {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #12141a;
+  background: #f2efe9;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+#farewell a:hover {
+  background: #fff;
+}
+
+#farewell button {
+  color: #f2efe9a8;
+  background: none;
+  border: 1px solid #ffffff1f;
+}
+
+#farewell button:hover {
+  color: #f2efe9;
+  border-color: #ffffff3d;
 }

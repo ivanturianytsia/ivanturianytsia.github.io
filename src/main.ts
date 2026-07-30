@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { createControls } from './controls'
+import { createFarewell } from './farewell'
 import { createLoadingScreen } from './loading'
 import { createStage } from './stage'
 import { buildWorld, type World } from './world'
@@ -27,6 +28,7 @@ const applyOutside = (texture: THREE.Texture | null): void => {
   stage.scene.environment = texture
 }
 
+const farewell = createFarewell()
 const loading = createLoadingScreen()
 
 const worldContext = {
@@ -107,6 +109,7 @@ declare global {
     palace?: {
       stage: typeof stage
       controls: typeof controls
+      farewell: typeof farewell
       readonly world: World
     }
   }
@@ -118,6 +121,7 @@ if (import.meta.hot) {
   window.palace = {
     stage,
     controls,
+    farewell,
     get world() {
       return world
     },
@@ -133,6 +137,7 @@ if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     world.dispose()
     controls.dispose()
+    farewell.dispose()
     stage.dispose()
   })
 }

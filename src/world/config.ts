@@ -19,13 +19,8 @@ export interface PictureConfig {
   readonly caption: string
   readonly wall: Wall
   /**
-   * Which plaster *panel* it hangs on, counted from the low corner.
-   *
-   * Panels, not cells — the kit's timber posts run up the middle of each wall
-   * piece rather than along its edges, so a cell centre is the one place a
-   * picture must not go. The clear plaster spans sit between posts, on the cell
-   * boundaries, which gives `cells - 1` usable panels per wall: 0 and 1 on a
-   * three-cell wall.
+   * Which wall cell it hangs on, counted from the low corner. On a three-cell
+   * wall, 1 is the middle.
    */
   readonly cell: number
   readonly height: number
@@ -58,6 +53,17 @@ export const KIT = {
    * rather than as a plaster wall with a stone patch under it.
    */
   windowPiece: 'Wall_UnevenBrick_Window_Wide_Round',
+  /**
+   * Which plain wall to use.
+   *
+   * Stone, not plaster, for a specific reason: `Wall_Plaster_Straight` carries a
+   * 12cm timber post dead down its centre (measured — timber at local x = -0.06
+   * and +0.06). That post lands exactly where you would want to hang something,
+   * and it cannot be removed without editing the mesh, since all of the piece's
+   * woodwork is one merged mesh. `Wall_UnevenBrick_Straight` has no geometry at
+   * all between y 1.0 and 2.6 — a clear wall — and it matches the stone window.
+   */
+  wallPiece: 'Wall_UnevenBrick_Straight',
   /**
    * A wall's visible face sits this far in front of its placement origin; the
    * remaining thickness hangs off behind. Needed so anything hung on a wall
@@ -262,8 +268,8 @@ export const VIEWPOINT = {
    * Angled across the room's diagonal so the window and the desk are both in
    * frame from the start — the light source and the thing it lights.
    */
-  yaw: 0,
-  pitch: -4,
+  yaw: 180,
+  pitch: -3,
 } as const
 
 /**
@@ -279,7 +285,7 @@ export const PICTURES = [
     url: oldWebsiteUrl,
     caption: 'old-website.jpg',
     wall: 'back',
-    cell: 0,
+    cell: 1,
     height: 0.74,
     centerY: 1.5,
   },
@@ -287,7 +293,7 @@ export const PICTURES = [
     url: blessUrl,
     caption: 'bless.png',
     wall: 'left',
-    cell: 0,
+    cell: 1,
     height: 0.42,
     centerY: 1.5,
   },

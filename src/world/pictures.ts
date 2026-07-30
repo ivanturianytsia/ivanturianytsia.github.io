@@ -245,15 +245,11 @@ function createCaption(text: string): THREE.Mesh {
 function placeOnWall(group: THREE.Group, config: PictureConfig): void {
   const { halfWidth, halfDepth } = INTERIOR
   const { wall, centerY } = config
-  // Midway between two cells, NOT at a cell centre.
-  //
-  // The kit's timber posts run up the *middle* of each wall piece, not along its
-  // edges — so a picture centred on a cell lands squarely on a post. The clear
-  // plaster panels are the spans between posts, which sit on the cell
-  // boundaries. Panel i for an n-cell wall therefore centres at
-  // (i - (n - 2) / 2) * module, giving n-1 usable panels.
+  // Centre of the wall cell. The stone wall piece has no post down its middle
+  // (see KIT.wallPiece), so a cell centre is clear wall — cell 1 of a three-cell
+  // wall is the middle of that wall.
   const cellsAlong = wall === 'back' ? LEVEL.cellsX : LEVEL.cellsZ
-  const along = (config.cell - (cellsAlong - 2) / 2) * KIT.module
+  const along = (config.cell - (cellsAlong - 1) / 2) * KIT.module
 
   group.position.y = centerY
 

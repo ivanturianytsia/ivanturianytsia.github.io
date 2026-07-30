@@ -13,7 +13,6 @@ export interface Kit {
 /** Piece names as authored in the kit, matching the glTF node names. */
 const PIECE = {
   floor: 'Floor_WoodDark',
-  wall: 'Wall_Plaster_Straight',
 } as const
 
 /**
@@ -109,7 +108,7 @@ function furnish(group: THREE.Group, props: ReadonlyMap<string, THREE.Object3D>)
 
 function build(group: THREE.Group, pieces: ReadonlyMap<string, THREE.Object3D>): void {
   const floor = pieces.get(PIECE.floor)
-  const wall = pieces.get(PIECE.wall)
+  const wall = pieces.get(KIT.wallPiece)
   const wallWindow = pieces.get(KIT.windowPiece)
 
   if (floor === undefined || wall === undefined || wallWindow === undefined) {
