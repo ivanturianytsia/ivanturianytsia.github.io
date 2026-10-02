@@ -1,8 +1,9 @@
 import * as THREE from 'three'
-import { HDRLoader } from 'three/addons/loaders/HDRLoader.js'
-import { OUTSIDE, SUN } from './config'
+import { INTERIOR, OUTSIDE, SUN } from './config'
 
 export interface SkyResult {
+  /** The backdrop plane hanging beyond the window. Belongs in the scene graph. */
+  readonly mesh: THREE.Object3D
   /** Unit vector pointing from the room toward the sun. */
   readonly sunDirection: THREE.Vector3
   dispose: () => void
@@ -21,30 +22,41 @@ function directionFromAngles(elevationDeg: number, azimuthDeg: number): THREE.Ve
 }
 
 /**
- * The world outside, as a single equirectangular HDR panorama.
+ * The world outside: a photo hung on a plane beyond the window, which also
+ * lights the room.
  *
- * This replaced a procedural `Sky` dome plus a 600m ground plane. Both had to
- * go: the panorama already contains its own terrain and horizon, and a real
- * ground plane would have occluded the bottom half of it — `scene.background`
- * draws at infinite distance, behind all actual geometry.
+ * One download, two textures. The backdrop samples it with ordinary UVs; a
+ * clone shares the same image but is flagged equirectangular so three will
+ * prefilter it into an environment map. `clone()` copies the texture object, not
+ * the pixels, so this costs nothing extra to fetch or decode.
  *
- * `HDRLoader`, not `RGBELoader` — the latter has been deprecated since r180 and
- * warns on construction, though most tutorials still use it.
- *
- * The load is asynchronous while `buildWorld` stays synchronous, which keeps the
- * HMR path simple; the texture is handed back through `applyOutside` whenever it
- * lands. On a hot reload the browser serves it straight from cache.
+ * Loaded asynchronously while `buildWorld` stays synchronous; the plane exists
+ * immediately and gets its texture when the photo arrives.
  */
 export function createSky(
   applyOutside: (texture: THREE.Texture | null) => void,
   manager: THREE.LoadingManager,
 ): SkyResult {
   const sunDirection = directionFromAngles(SUN.elevation, SUN.azimuth)
+  const { width, distance, centerX, centerY } = OUTSIDE.backdrop
+
+  // Unlit, and excluded from tone mapping: it is already a photograph of a lit
+  // scene. Running it through the room's lighting would double-light it, and
+  // through the tone mapper would desaturate a sunset whose whole point is
+  // colour.
+  const material = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false })
+  // Provisional square; resized to the photo's real aspect once it loads.
+  const backdrop = new THREE.Mesh(new THREE.PlaneGeometry(width, width), material)
+  backdrop.name = 'backdrop'
+  // Window wall is the -Z wall; hang the photo `distance` beyond its outer face.
+  // PlaneGeometry already faces +Z, which is back into the room.
+  backdrop.position.set(centerX, centerY, -(INTERIOR.halfDepth + distance))
 
   let disposed = false
-  let texture: THREE.Texture | null = null
+  let photo: THREE.Texture | null = null
+  let environment: THREE.Texture | null = null
 
-  void new HDRLoader(manager)
+  void new THREE.TextureLoader(manager)
     .loadAsync(OUTSIDE.url)
     .then((loaded) => {
       // The world may have been torn down by a hot reload while this was in
@@ -54,17 +66,28 @@ export function createSky(
         return
       }
 
-      // Without this the panorama is sampled as a flat rectangle rather than
-      // wrapped around the scene, and three cannot prefilter it for lighting.
-      loaded.mapping = THREE.EquirectangularReflectionMapping
-      texture = loaded
-      applyOutside(loaded)
+      loaded.colorSpace = THREE.SRGBColorSpace
+      photo = loaded
+
+      const { width: px, height: py } = loaded.image as { width: number; height: number }
+      if (px > 0 && py > 0) {
+        backdrop.geometry.dispose()
+        backdrop.geometry = new THREE.PlaneGeometry(width, (width * py) / px)
+      }
+      material.map = loaded
+      material.needsUpdate = true
+
+      environment = loaded.clone()
+      environment.mapping = THREE.EquirectangularReflectionMapping
+      environment.needsUpdate = true
+      applyOutside(environment)
     })
     .catch((error: unknown) => {
       console.error(`Could not load ${OUTSIDE.url}`, error)
     })
 
   return {
+    mesh: backdrop,
     sunDirection,
 
     dispose() {
@@ -72,8 +95,10 @@ export function createSky(
       // Detach before disposing, so the renderer is never holding a reference
       // to a texture whose GPU resources have gone.
       applyOutside(null)
-      texture?.dispose()
-      texture = null
+      environment?.dispose()
+      photo?.dispose()
+      environment = null
+      photo = null
     },
   }
 }

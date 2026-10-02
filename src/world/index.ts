@@ -69,6 +69,7 @@ export function buildWorld(context: WorldContext): World {
   const kit = createKit(context.loadingManager, refreshShadows)
   const pictures = createPictures(context.renderer, refreshShadows, context.loadingManager)
 
+  root.add(sky.mesh)
   root.add(kit.group)
   root.add(sun.group)
   root.add(createBounce())

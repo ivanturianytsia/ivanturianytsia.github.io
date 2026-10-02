@@ -258,9 +258,7 @@ Two things that will bite:
 
 ## Credits
 
-`src/assets/qwantani-dusk-2.hdr` — *Qwantani Dusk 2* by **Greg Zaal** and **Jarod
-Guest**, [Poly Haven](https://polyhaven.com/a/qwantani_dusk_2), **CC0**. No
-attribution required; listed because it's worth knowing where it came from.
+`src/assets/berlin-train.jpg` — the view from the window. Ivan's own photo.
 
 ## Known issue
 

@@ -9,7 +9,7 @@ import blessUrl from '../assets/bless.png'
 import fantasyPropsUrl from '../assets/fantasy-props.glb'
 import medievalKitUrl from '../assets/medieval-kit.glb'
 import oldWebsiteUrl from '../assets/old-website.jpg'
-import qwantaniDuskUrl from '../assets/qwantani-dusk-2.hdr'
+import berlinTrainUrl from '../assets/berlin-train.jpg'
 
 /** Which wall a picture hangs on. */
 export type Wall = 'left' | 'right' | 'back'
@@ -198,39 +198,57 @@ export const SHADOW = {
 
 export const OUTSIDE = {
   /**
-   * Equirectangular HDR panorama used as both the view through the window and
-   * the room's image-based light.
+   * The view out of the window: your own photo of the Fernsehturm at dusk, with
+   * an S-Bahn coming in below.
    *
-   * Assigning an equirect texture to `scene.environment` is enough: three's
-   * WebGLEnvironments runs PMREMGenerator.fromEquirectangular internally and
-   * caches the result, so there is no manual prefiltering step here.
-   *
-   * Poly Haven, CC0, 2K.
-   *
-   * Resolution is chosen for the *background*, not the lighting — the lighting
-   * gets prefiltered down to 256px whatever you supply, so 1K would do. The
-   * window is the constraint: it shows only ~24.7 degrees of a 360 degree
-   * panorama, blown up across ~360 screen pixels on a 16:9 desktop. That works
-   * out at 2K → 141 source pixels → 2.6x upscale. 1K was 5.1x and looked like
-   * mush; 4K would be ~1.3x and properly sharp, at ~25MB instead of 6.5MB.
+   * A flat photo, hung on a backdrop plane beyond the window — not an HDRI. It
+   * is an ordinary LDR photograph rather than a 360° panorama, and mapping one
+   * as an equirectangular environment would wrap it round the whole sphere and
+   * bend the horizon. A plane is the honest fit: you only ever see ~25° of the
+   * outside through that arch, so a flat backdrop has no visible distortion,
+   * uses the photo at near full resolution, and costs 414 KB instead of the
+   * 1.5–6.3 MB the panoramas did.
    */
-  url: qwantaniDuskUrl,
+  url: berlinTrainUrl,
+
   /**
-   * Spins the panorama about Y, in degrees, so its bright part can be lined up
-   * with the window and with SUN.azimuth. Applied to background and environment
-   * together so the reflections never disagree with what you can see.
+   * Backdrop placement, in metres. Height is not set here: it is derived from
+   * the photo's own aspect ratio once it loads, so swapping in a differently
+   * shaped photo can never stretch it.
+   *
+   * Width trades coverage against how much of the photo you see. Portrait photos
+   * get tall fast, so a plane wide enough to hide its edges from the far corners
+   * would only show a thin band of the image through the arch. 8m covers anyone
+   * standing within ~2m of the room's centre line; from the corners you may
+   * catch the edge, where the same photo shows through as the background.
+   */
+  backdrop: {
+    width: 8,
+    /** How far beyond the window wall it hangs. Far enough to read as distance. */
+    distance: 6,
+    /**
+     * Where the plane's centre hangs. The viewpoint never moves (the controls
+     * only rotate), so what the arch frames is fixed and can be composed exactly.
+     *
+     * Tuned by projecting the arch's opening onto the backdrop from the viewpoint
+     * and placing the photo inside it: the Fernsehturm sits about 72% across the
+     * opening, with the spire clear of the arch curve. The geometric centre of
+     * the right third (83%) looked jammed against the edge, because the arch
+     * narrows towards the top exactly where the spire is.
+     * Moving the plane left or down moves the photo left or down in the window.
+     */
+    centerX: -0.6,
+    centerY: 1.75,
+  },
+
+  /**
+   * The same photo also supplies the room's ambient light, so the warmth on the
+   * walls matches the sunset you can see. Its lack of real HDR range doesn't
+   * matter much here: three prefilters the environment down to 256px, and the
+   * sun and bounce light carry the actual shading.
    */
   rotationDeg: 0,
-  /**
-   * Blur on the *background only*, not on its lighting contribution.
-   *
-   * Kept at 0. It was meant to disguise the 1K upscale, but the upscale is
-   * already soft enough on its own — adding blur on top just threw away the
-   * little horizon detail there was. Raise it only if you want the view
-   * deliberately dreamy.
-   */
   blurriness: 0,
-  /** Brightness of the visible panorama, independent of its lighting contribution. */
   intensity: 1,
 } as const
 
@@ -244,9 +262,11 @@ export const LIGHTING = {
    * reading as sun, because everything is already lit and the patch on the
    * floor has nothing to contrast against.
    */
-  environmentIntensity: 0.4,
+  // Raised from 0.4 when the HDRI became an LDR photo: a photograph caps at
+  // white and this one is 40% dark rooftops, so it carries far less light.
+  environmentIntensity: 1.1,
   /** Renderer tone-mapping exposure. */
-  exposure: 0.85,
+  exposure: 1,
   /**
    * Stand-in for interior bounce light.
    *
@@ -262,7 +282,7 @@ export const LIGHTING = {
    * is derived rather than dialled in.
    */
   bounce: {
-    intensity: 0.4,
+    intensity: 0.55,
     fromAbove: 0xd8cfc2,
     fromBelow: 0x8a7358,
   },
