@@ -30,6 +30,11 @@ const IDLE_MS = 5_000
 /** Anything that counts as "still here". */
 const INTERACTION_EVENTS = ['pointerdown', 'pointermove', 'touchstart', 'keydown'] as const
 
+export interface FarewellOptions {
+  /** Fired when the visitor follows the LinkedIn link, by any button. */
+  onConnect?: () => void
+}
+
 export interface Farewell {
   /**
    * Starts watching. Called once the loading screen has faded, so the idle
@@ -67,7 +72,7 @@ export interface Farewell {
  * not `blur`/`visibilitychange` either — those fire on every alt-tab, which
  * would make this nag rather than say goodbye.
  */
-export function createFarewell(): Farewell {
+export function createFarewell(options: FarewellOptions = {}): Farewell {
   const dialog = document.querySelector<HTMLDialogElement>('#farewell')
   const link = document.querySelector<HTMLAnchorElement>('#farewell-link')
 
@@ -157,6 +162,19 @@ export function createFarewell(): Farewell {
       (event: MouseEvent) => {
         if (event.relatedTarget !== null) return
         maybeShow(event.clientY)
+      },
+      { signal },
+    )
+  }
+
+  if (link !== null && options.onConnect !== undefined) {
+    const { onConnect } = options
+    link.addEventListener('click', onConnect, { signal })
+    // Middle-click opens the link too, and fires auxclick rather than click.
+    link.addEventListener(
+      'auxclick',
+      (event: MouseEvent) => {
+        if (event.button === 1) onConnect()
       },
       { signal },
     )

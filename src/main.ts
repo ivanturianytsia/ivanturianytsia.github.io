@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { track } from './analytics'
 import { createControls } from './controls'
 import { createFarewell } from './farewell'
 import { createLoadingScreen } from './loading'
@@ -14,7 +15,10 @@ const hint = document.querySelector<HTMLParagraphElement>('#hint')
 
 const stage = createStage(canvas)
 const controls = createControls(stage.camera, canvas, {
-  onFirstLook: () => hint?.setAttribute('data-dismissed', 'true'),
+  onFirstLook: () => {
+    hint?.setAttribute('data-dismissed', 'true')
+    track('first_look')
+  },
 })
 
 /**
@@ -28,7 +32,9 @@ const applyOutside = (texture: THREE.Texture | null): void => {
   stage.scene.environment = texture
 }
 
-const farewell = createFarewell()
+const farewell = createFarewell({
+  onConnect: () => track('linkedin_clicked'),
+})
 const loading = createLoadingScreen()
 
 const worldContext = {
@@ -49,9 +55,14 @@ stage.onFrame((dt) => {
 // the loading screen never reappears mid-session.
 void loading
   .reveal(() => stage.renderer.compileAsync(stage.scene, stage.camera))
-  // Armed only once the room is actually visible, so the touch idle timer
-  // measures time spent in it rather than time spent downloading it.
-  .then(() => farewell.arm())
+  .then(() => {
+    // From navigation start to the room fully visible, fade included — what
+    // the visitor actually sat through.
+    track('room_ready', { total_ms: Math.round(performance.now()) })
+    // Armed only once the room is actually visible, so the touch idle timer
+    // measures time spent in it rather than time spent downloading it.
+    farewell.arm()
+  })
 
 /**
  * Attaches a world to the stage.

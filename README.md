@@ -27,6 +27,8 @@ src/
 ├── controls.ts    drag-to-look
 ├── dispose.ts     GPU resource cleanup
 ├── loading.ts     black screen + progress line, fades in on ready
+├── farewell.ts    "Let's connect" card on exit intent
+├── analytics.ts   three events to PostHog, no SDK
 └── world/         ← everything you iterate on, hot-swapped wholesale
     ├── config.ts     every tunable number, incl. the floor plan
     ├── kit.ts        builds the room from modular kit pieces + places props
@@ -93,6 +95,24 @@ palace.stage.camera.rotation.y      // find a yaw you like, paste into config
 ```
 
 It is defined only under `import.meta.hot`, so it never reaches production.
+
+## Analytics
+
+[`src/analytics.ts`](src/analytics.ts) sends three events to PostHog (EU cloud):
+
+| Event | When | Notable property |
+| --- | --- | --- |
+| `room_ready` | loading screen has faded out | `total_ms` |
+| `first_look` | first drag, swipe or key turn | `ms_since_load` |
+| `linkedin_clicked` | the farewell card's LinkedIn link | |
+
+No `posthog-js` — it is ~97 KB gzipped to do what one `fetch` does here. No
+cookie or storage either: each page load gets a fresh random id and no person
+profile, which keeps the site clear of a consent banner.
+
+It is **off under `npm run dev`** (events are logged to the console instead), so
+tuning sessions don't pollute the numbers. `npm run preview` serves the
+production build and sends for real.
 
 ## Deploying
 
